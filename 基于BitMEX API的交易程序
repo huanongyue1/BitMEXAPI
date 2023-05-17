@@ -1,0 +1,25 @@
+import bitmex
+
+# 初始化API
+client = bitmex.bitmex(test=False, api_key=api_key, api_secret=api_secret)
+
+# 获取市场深度
+depth = client.OrderBook.OrderBook_getL2(symbol='XBTUSD', depth=10).result()
+
+# 获取账户余额
+balance = client.User.User_getMargin().result()
+
+# 下单
+order = client.Order.Order_new(
+    symbol='XBTUSD',
+    side='Buy',
+    ordType='Limit',
+    orderQty=1,
+    price=50000
+).result()
+
+# 撤单
+client.Order.Order_cancel(orderID=order['orderID']).result()
+
+# 获取交易历史
+trades = client.Execution.Execution_getTradeHistory(symbol='XBTUSD').result()
